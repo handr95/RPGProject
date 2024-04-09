@@ -1,0 +1,16 @@
+#pragma once
+
+enum E_CLASS : int{
+	E_CLASS_NONE = 0,
+	E_CLASS_KNIGHT = 1,
+	E_CLASS_MAGICIAN = 2,
+	E_CLASS_ARCHER = 3
+};
+
+enum E_INPUT_KEY : int{
+	E_INPUT_KEY_NONE = 0,
+	E_INPUT_KEY_UP = 72,
+	E_INPUT_KEY_DOWN = 80,
+	E_INPUT_KEY_LEFT = 75,
+	E_INPUT_KEY_RIGHT = 77
+};
