@@ -1,28 +1,7 @@
 #include "pch.h"
 #include "map_manager.h"
-#include <string>
 #include <iostream>
-#include <conio.h>
-#include <Windows.h>
 #include "enum.h"
-
-void MapManager::move(int x, int y) {
-	int move_x = _current_x + x;
-	int move_y = _current_y + y;
-
-	if (_columns <= move_x || _rows <= move_y || 0 > move_x || 0 > move_y) {
-		return;
-	}
-	int current = _map[move_x][move_y];
-	if (current == 1) {
-		return;
-	}
-
-	_map[_current_x][_current_y] = 0;
-	_current_x = move_x;
-	_current_y = move_y;
-	_map[_current_x][_current_y] = 2;
-}
 
 void MapManager::print_map() const {
 	std::cout << "Print my map:" << std::endl;
@@ -38,56 +17,104 @@ void MapManager::print_map() const {
 			case 2:
 				std::cout << "¡Ú" << " ";
 				break;
+			case 3:
+				std::cout << "¢Â" << " ";
+				break;
 			}
 		}
 		std::cout << std::endl;
 	}
 }
 
+void MapManager::create_map() {
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> dist(0, 100); // ±ÕÀÏÇÑ ºÐÆ÷ÀÇ ·£´ý Á¤¼ö »ý¼º±â
+	int percent = 40;
 
-void MapManager::move_map() {
-	int nInputKey = 0;
-
-	while (true)
-	{
-		if (::_kbhit() > 0)
-		{
-			nInputKey = ::_getch();
-			printf("Key : %d\n", nInputKey);
+	// ¸ÊÀ» ·£´ýÇÏ°Ô 0°ú 1·Î Ã¤¿ò
+	for (int i = 0; i < _rows; i++) {
+		for (int j = 0; j < _columns; j++) {
+			_map[i][j] = dist(gen) <= percent ? 0 : 1; // ·£´ýÇÑ °ªÀ¸·Î ¼¿À» Ã¤¿ò
 		}
-		else nInputKey = 0;
-		switch (static_cast<E_INPUT_KEY>(nInputKey))
-		{
-		case E_INPUT_KEY::E_INPUT_KEY_NONE: {
-			break;
-		}
-		case E_INPUT_KEY::E_INPUT_KEY_UP: {
-			std::cout << "up";
-			move(-1, 0);
-			print_map();
-			break;
-		}
-		case E_INPUT_KEY::E_INPUT_KEY_DOWN: {
-			std::cout << "down";
-			move(1, 0);
-			print_map();
-			break;
-		}
-		case E_INPUT_KEY::E_INPUT_KEY_LEFT: {
-			std::cout << "left";
-			move(0, -1);
-			print_map();
-			break;
-		}
-		case E_INPUT_KEY::E_INPUT_KEY_RIGHT: {
-			std::cout << "right";
-			move(0, 1);
-			print_map();
-			break;
-		}
-		default: break;
-		}
-
-		::Sleep(100);
 	}
+
+	//_map[0][0] = 0;
+	//// 0 ±¸¿ª³¢¸® ¹­À½.
+	//int check = 10;
+	//for (int i = 0; i < _rows; i++) {
+	//	for (int j = 0; j < _columns; j++) {
+	//		if (_map[i][j] == 0) {
+	//			flood_fill(i, j, check);
+	//			check++;
+	//		}
+	//	}
+	//}
+
+	//// ´Ù¸¥ ±¸¿ª³¢¸® ¿¬°á
+	//connect_zones();
+
+
+	_map[0][0] = 2;
+}
+
+void MapManager::flood_fill(int x, int y, int check) {
+	if (_map[x][y] == 1) {
+		return;
+	}
+	_map[x][y] = check;
+
+	std::vector<std::vector<int>> directs = { {1,0},{0,1},{-1,0},{0,-1} };
+	for (std::vector<int> direct : directs) {
+		int goX = x + direct[0];
+		int goY = y + direct[1];
+		if (goX < 0 || goY < 0 || goX > _map.size() - 1 || goY > _map[goX].size() - 1) {
+			continue;
+		}
+
+		if (_map[goX][goY] == 0) {
+			flood_fill(goX, goY, check);
+		}
+	}
+}
+
+void MapManager::connect_zones() {
+}
+
+std::pair<int, int> MapManager::random_rand_path() {
+	std::random_device rd;
+	std::mt19937 gen(rd());
+
+	int rows = _rows;
+	int cols = _columns;
+
+	std::uniform_int_distribution<int> rowDist(0, rows - 1);
+	std::uniform_int_distribution<int> colDist(0, cols - 1);
+
+	while (true) {
+		int row = rowDist(gen);
+		int col = colDist(gen);
+
+		if (_map[row][col] == 0) {
+			return std::make_pair(row, col);
+		}
+	}
+}
+
+bool MapManager::move(int current_x, int current_y, int move_x, int move_y) {
+	if (current_x == move_x && current_y == move_y) {
+		return false;
+	}
+	if (!is_possible_move(move_x, move_y)) {
+		return false;
+	}
+
+	auto temp = _map[current_x][current_y];
+	_map[current_x][current_y] = _map[move_x][move_y];
+	_map[move_x][move_y] = temp;
+	return true;
+}
+
+void MapManager::set_monster(int x, int y) {
+	_map[x][y] = 3;
 }
