@@ -76,7 +76,6 @@ int main()
 	// 플레이어 선택
 	auto player = select_job(mapManager);
 	player->print_user_info();
-	mapManager->print_map();
 
 	MobManager mobManager(mapManager); // MobManager에 MapManager 전달
 	mobManager.add_monster(3);
@@ -85,8 +84,6 @@ int main()
 	std::thread monster_thread(&MobManager::move_monsters, &mobManager);
 
 	// 메인 스레드에서 다른 작업 처리
-	// 예를 들어, 플레이어 이동 등
-	mapManager->print_map();
 	player->move_map();
 
 	// 몬스터 스레드가 종료되기를 대기

@@ -13,7 +13,6 @@ void PlayerManager::move_map() {
 		if (::_kbhit() > 0)
 		{
 			nInputKey = ::_getch();
-			printf("Key : %d\n", nInputKey);
 		}
 		else nInputKey = 0;
 		switch (static_cast<E_INPUT_KEY>(nInputKey))
@@ -22,28 +21,29 @@ void PlayerManager::move_map() {
 			break;
 		}
 		case E_INPUT_KEY::E_INPUT_KEY_UP: {
-			std::cout << "up";
 			move_player(-1, 0);
 			break;
 		}
 		case E_INPUT_KEY::E_INPUT_KEY_DOWN: {
-			std::cout << "down";
 			move_player(1, 0);
 			break;
 		}
 		case E_INPUT_KEY::E_INPUT_KEY_LEFT: {
-			std::cout << "left";
 			move_player(0, -1);
 			break;
 		}
 		case E_INPUT_KEY::E_INPUT_KEY_RIGHT: {
-			std::cout << "right";
 			move_player(0, 1);
 			break;
 		}
 		default: break;
 		}
 
+		int a = 1;
+		int b = 2;
+		if (a != 1) {
+
+		}
 		::Sleep(100);
 	}
 }

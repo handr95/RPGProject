@@ -4,27 +4,29 @@
 #include "enum.h"
 
 void MapManager::print_map() const {
-	std::cout << "Print my map:" << std::endl;
+	std::system("cls");
+
+	printf("Print my map:\n");
 	for (const auto& row : _map) {
 		for (int cell : row) {
 			switch (cell) {
 			case 0:
-				std::cout << "бр" << " ";
+				printf("бр");
 				break;
 			case 1:
-				std::cout << "бс" << " ";
+				printf("бс");
 				break;
 			case 2:
-				std::cout << "б┌" << " ";
+				printf("б┘");
 				break;
 			case 3:
-				std::cout << "в┬" << " ";
+				printf("в┬");
 				break;
 			}
-		}
-		std::cout << std::endl;
-	}
 }
+		printf("\n");
+		}
+	}
 
 void MapManager::create_map() {
 	std::random_device rd;

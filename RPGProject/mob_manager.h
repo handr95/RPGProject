@@ -4,6 +4,7 @@
 #include <mutex>
 #include <vector>
 #include <random>
+#include <windows.h> 
 #include "map_manager.h"
 
 class MobManager {
@@ -19,13 +20,17 @@ public:
 		int m_nDefense;
 
 	};
-	MobManager(std::shared_ptr<MapManager> mapManager) : _mapManager(mapManager) {}
-
+	MobManager(std::shared_ptr<MapManager> mapManager) : _mapManager(mapManager) {
+		InitializeCriticalSection(&m_cs);
+	}
+	~MobManager() {
+		DeleteCriticalSection(&m_cs); 
+	}
 	void add_monster(int count); // 몬스터 추가
 	void move_monsters(); // 몬스터 이동
 
 private:
 	std::shared_ptr<MapManager> _mapManager; // MapManager에 대한 참조
 	std::vector<MobInfo> _monster_list; // 몬스터 정보
-	std::mutex _mutex; // 스레드 간의 안전한 자원 접근을 위한 뮤텍스
+	CRITICAL_SECTION m_cs;
 };

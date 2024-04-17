@@ -2,8 +2,7 @@
 #include "mob_manager.h"
 
 void MobManager::add_monster(int count) {
-	_mutex.lock(); // 자원 접근 뮤텍스 잠금
-
+	EnterCriticalSection(&m_cs);
 	int create_mob = 0;
 	while (create_mob < count) {
 		auto gps = _mapManager->random_rand_path();
@@ -11,13 +10,12 @@ void MobManager::add_monster(int count) {
 		_mapManager->set_monster(gps.first, gps.second);
 		create_mob++;
 	}
-
-	_mutex.unlock(); // 뮤텍스 잠금 해제
+	LeaveCriticalSection(&m_cs);
 }
 
 void MobManager::move_monsters() {
 	while (true) {
-		_mutex.lock(); // 자원 접근 뮤텍스 잠금
+		EnterCriticalSection(&m_cs);
 		for (auto& monster : _monster_list) {
 			// 몬스터를 랜덤하게 이동시킴 (예시로 임의의 방향으로 이동)
 			std::random_device rd;
@@ -37,7 +35,7 @@ void MobManager::move_monsters() {
 				monster.current_y = new_y;
 			}
 		}
-		_mutex.unlock(); // 뮤텍스 잠금 해제
+		LeaveCriticalSection(&m_cs);
 
 		_mapManager->print_map();
 
