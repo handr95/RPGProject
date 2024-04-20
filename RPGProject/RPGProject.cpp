@@ -7,6 +7,7 @@
 #include "enum.h"
 #include <iostream>
 #include <fstream>
+#include <thread>
 
 class AttackManager; // 전투 공식 및 전투 체크사항
 class EnemyManager; // 적군 관리
@@ -76,6 +77,8 @@ int main()
 	// 플레이어 선택
 	auto player = select_job(mapManager);
 	player->print_user_info();
+
+	std::system("cls");
 
 	MobManager mobManager(mapManager); // MobManager에 MapManager 전달
 	mobManager.add_monster(3);

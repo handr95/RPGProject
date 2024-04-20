@@ -38,12 +38,6 @@ void PlayerManager::move_map() {
 		}
 		default: break;
 		}
-
-		int a = 1;
-		int b = 2;
-		if (a != 1) {
-
-		}
 		::Sleep(100);
 	}
 }
@@ -57,6 +51,7 @@ void PlayerManager::move_player(int move_x, int move_y) {
 		&& _mapManager->move(m_current_x, m_current_y, new_x, new_y)) {
 		m_current_x = new_x;
 		m_current_y = new_y;
+		_mapManager->set_player_position(m_current_x, m_current_y);
 	}
 
 	_mapManager->print_map();

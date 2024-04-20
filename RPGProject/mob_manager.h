@@ -1,10 +1,6 @@
 #include <iostream>
-#include <thread>
-#include <chrono>
-#include <mutex>
 #include <vector>
-#include <random>
-#include <windows.h> 
+#include <windows.h>
 #include "map_manager.h"
 
 class MobManager {
@@ -24,7 +20,7 @@ public:
 		InitializeCriticalSection(&m_cs);
 	}
 	~MobManager() {
-		DeleteCriticalSection(&m_cs); 
+		DeleteCriticalSection(&m_cs);
 	}
 	void add_monster(int count); // 몬스터 추가
 	void move_monsters(); // 몬스터 이동
