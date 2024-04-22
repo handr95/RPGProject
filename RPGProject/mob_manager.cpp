@@ -3,22 +3,19 @@
 #include "util_manager.h"
 #include <thread>
 
-void MobManager::add_monster(int count) {
-	EnterCriticalSection(&m_cs);
+void MobManager::add_monster() {
 	int create_mob = 0;
 	int add_count = _mapManager->rows();
-	while (create_mob < count) {
+	while (create_mob < add_count) {
 		auto gps = _mapManager->random_rand_path();
 		_monster_list.push_back({ gps.first, gps.second }); // 몬스터 추가
 		_mapManager->set_monster(gps.first, gps.second);
 		create_mob++;
 	}
-	LeaveCriticalSection(&m_cs);
 }
 
 void MobManager::move_monsters() {
 	while (true) {
-		EnterCriticalSection(&m_cs);
 		for (auto& monster : _monster_list) {
 			// 몬스터를 랜덤하게 이동시킴
 			auto direct = MoveManager::random_direct();
@@ -33,7 +30,6 @@ void MobManager::move_monsters() {
 				monster.current_y = new_y;
 			}
 		}
-		LeaveCriticalSection(&m_cs);
 
 		_mapManager->print_map();
 

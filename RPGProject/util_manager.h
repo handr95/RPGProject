@@ -3,7 +3,7 @@
 #include "enum.h"
 #include <iostream>
 #include <random>
-#include <windows.h>
+#include <Windows.h>
 
 
 class MoveManager {

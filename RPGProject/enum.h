@@ -4,7 +4,8 @@ constexpr int MAP_RAND = 0;
 constexpr int MAP_WALL = 1;
 constexpr int MAP_PLAYER = 2;
 constexpr int MAP_MONSTER = 3;
-constexpr int RAND_PERCENT = 50;
+constexpr int RAND_PERCENT = 20;
+constexpr int FLOOD_START_IDX = 100;
 
 enum class E_CLASS : int {
 	E_CLASS_NONE = 0,

@@ -81,7 +81,7 @@ int main()
 	std::system("cls");
 
 	MobManager mobManager(mapManager); // MobManager에 MapManager 전달
-	mobManager.add_monster(3);
+	mobManager.add_monster();
 
 	// 몬스터 이동을 위한 스레드 시작
 	std::thread monster_thread(&MobManager::move_monsters, &mobManager);

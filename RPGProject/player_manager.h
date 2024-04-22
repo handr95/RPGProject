@@ -6,7 +6,7 @@
 
 class PlayerManager {
 public:
-	PlayerManager(std::shared_ptr<MapManager> mapManager, E_CLASS job)
+	explicit PlayerManager(std::shared_ptr<MapManager> mapManager, E_CLASS job)
 		: _mapManager(mapManager), _job(job) {};
 	virtual ~PlayerManager() = default;
 	virtual void print_user_info() = 0;
@@ -30,7 +30,7 @@ private:
 
 class None : public PlayerManager {
 public:
-	None(std::shared_ptr<MapManager> mapManager) : PlayerManager(mapManager, E_CLASS::E_CLASS_NONE) {}
+	explicit None(std::shared_ptr<MapManager> mapManager) : PlayerManager(mapManager, E_CLASS::E_CLASS_NONE) {}
 	inline void print_user_info() override {
 		std::cout << "None player" << std::endl;
 	}
@@ -38,7 +38,7 @@ public:
 
 class Knight : public PlayerManager {
 public:
-	Knight(std::shared_ptr<MapManager> mapManager) : PlayerManager(mapManager, E_CLASS::E_CLASS_KNIGHT) {}
+	explicit Knight(std::shared_ptr<MapManager> mapManager) : PlayerManager(mapManager, E_CLASS::E_CLASS_KNIGHT) {}
 	inline void print_user_info() override {
 		std::cout << "Knight player" << std::endl;
 	}
@@ -46,7 +46,7 @@ public:
 
 class Magician : public PlayerManager {
 public:
-	Magician(std::shared_ptr<MapManager> mapManager) : PlayerManager(mapManager, E_CLASS::E_CLASS_MAGICIAN) {}
+	explicit Magician(std::shared_ptr<MapManager> mapManager) : PlayerManager(mapManager, E_CLASS::E_CLASS_MAGICIAN) {}
 	inline void print_user_info() override {
 		std::cout << "Magician player" << std::endl;
 	}
@@ -54,7 +54,7 @@ public:
 
 class Archer : public PlayerManager {
 public:
-	Archer(std::shared_ptr<MapManager> mapManager) : PlayerManager(mapManager, E_CLASS::E_CLASS_ARCHER) {}
+	explicit Archer(std::shared_ptr<MapManager> mapManager) : PlayerManager(mapManager, E_CLASS::E_CLASS_ARCHER) {}
 	inline void print_user_info() override {
 		std::cout << "Archer player" << std::endl;
 	}

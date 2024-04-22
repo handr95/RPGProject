@@ -2,6 +2,9 @@
 #include "pch.h"
 #include "enum.h"
 #include <vector>
+#include <map>
+#include <set>
+#include <Windows.h>
 #include <random>
 
 class MapManager {
@@ -10,14 +13,20 @@ public:
 		return _map;
 	}
 
-	MapManager(int rows, int columns) :
-		_map(rows, std::vector<int>(columns, 0)), _rows(rows), _columns(columns) { };
+	explicit MapManager(int rows, int columns) :
+		_map(rows, std::vector<int>(columns, 0)), _rows(rows), _columns(columns) {
+		InitializeCriticalSection(&m_cs);
+	};
 
 	bool move(int current_x, int current_y, int move_x, int move_y);
 	void print_map() const;
+
 	void create_map();
+	void generate_random_map();
 	void flood_fill(int x, int y, int check);
-	void connect_zones();
+	std::set<std::vector<int>> connect_area(int startX, int startY);
+	std::set<std::vector<int>> reconstruct_path(std::vector<std::vector<std::pair<int, int>>>& prev, int endX, int endY) const;
+
 	void set_monster(int x, int y);
 	std::pair<int, int> random_rand_path();
 
@@ -36,9 +45,18 @@ public:
 	inline int rows() const {
 		return _rows;
 	}
+
+	~MapManager() {
+		DeleteCriticalSection(&m_cs);
+	}
 private:
 	std::pair<int, int> _player_position;
 	std::vector<std::vector<int>> _map;
 	int _rows;
 	int _columns;
+
+	std::set<int> _remain_area_idx;
+	std::map<int, std::vector<int>> _area_position_map;
+	int start_area_idx;
+	CRITICAL_SECTION m_cs;
 };
