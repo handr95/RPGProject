@@ -1,5 +1,3 @@
-#include <iostream>
-#include <vector>
 #include "map_manager.h"
 
 class MobManager {

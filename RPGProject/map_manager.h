@@ -1,11 +1,33 @@
 #pragma once
 #include "pch.h"
 #include "enum.h"
-#include <vector>
-#include <map>
-#include <set>
-#include <Windows.h>
-#include <random>
+
+class CriticalSection {
+public:
+	CriticalSection() {
+		InitializeCriticalSection(&m_cs);  // CRITICAL_SECTION 초기화
+	}
+
+	~CriticalSection() {
+		DeleteCriticalSection(&m_cs);      // 자원 해제
+	}
+
+	void lock() {
+		EnterCriticalSection(&m_cs);       // 임계 영역 진입
+	}
+
+	void unlock() {
+		LeaveCriticalSection(&m_cs);       // 임계 영역 해제
+	}
+
+	// 복사 생성자와 할당 연산자 삭제하여 복사 방지
+	CriticalSection(const CriticalSection&) = delete;
+	CriticalSection& operator=(const CriticalSection&) = delete;
+
+private:
+	CRITICAL_SECTION m_cs;                // 내부 CRITICAL_SECTION 객체
+};
+
 
 class MapManager {
 public:
@@ -15,11 +37,10 @@ public:
 
 	explicit MapManager(int rows, int columns) :
 		_map(rows, std::vector<int>(columns, 0)), _rows(rows), _columns(columns) {
-		InitializeCriticalSection(&m_cs);
 	};
 
 	bool move(int current_x, int current_y, int move_x, int move_y);
-	void print_map() const;
+	void print_map();
 
 	void create_map();
 	void generate_random_map();
@@ -45,10 +66,6 @@ public:
 	inline int rows() const {
 		return _rows;
 	}
-
-	~MapManager() {
-		DeleteCriticalSection(&m_cs);
-	}
 private:
 	std::pair<int, int> _player_position;
 	std::vector<std::vector<int>> _map;
@@ -58,5 +75,5 @@ private:
 	std::set<int> _remain_area_idx;
 	std::map<int, std::vector<int>> _area_position_map;
 	int start_area_idx;
-	CRITICAL_SECTION m_cs;
+	CriticalSection critical_section;
 };

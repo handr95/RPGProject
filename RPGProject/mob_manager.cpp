@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "mob_manager.h"
 #include "util_manager.h"
-#include <thread>
 
 void MobManager::add_monster() {
 	int create_mob = 0;

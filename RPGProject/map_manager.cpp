@@ -1,12 +1,11 @@
 #include "pch.h"
-#include <iostream>
-#include <queue>
 #include "map_manager.h"
 #include "util_manager.h"
 #include "enum.h"
 
 
-void MapManager::print_map() const {
+void MapManager::print_map() {
+	std::lock_guard<CriticalSection> lock(critical_section);
 	ConsoleManager::clear_console();
 	printf("Print my map:\n");
 	for (const auto& row : map()) {
@@ -189,20 +188,18 @@ std::pair<int, int> MapManager::random_rand_path() {
 
 bool MapManager::move(int current_x, int current_y, int move_x, int move_y) {
 	// player, mob 동시에 move가 일어날수 있어 lock 추가
-	EnterCriticalSection(&m_cs);
+	std::lock_guard<CriticalSection> lock(critical_section);
+
 	if (current_x == move_x && current_y == move_y) {
-		LeaveCriticalSection(&m_cs);
 		return false;
 	}
 	if (!is_possible_move(move_x, move_y)) {
-		LeaveCriticalSection(&m_cs);
 		return false;
 	}
 
 	auto temp = _map[current_x][current_y];
 	_map[current_x][current_y] = _map[move_x][move_y];
 	_map[move_x][move_y] = temp;
-	LeaveCriticalSection(&m_cs);
 	return true;
 }
 
